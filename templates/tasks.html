@@ -1,0 +1,231 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Tasks
+{% endblock %}
+
+{% block main %}
+    <link rel="stylesheet" href="/static/style.css">
+    <h2>Your Tasks (in progress)</h2>
+    <br>
+    {% if prog %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Requesting Resident</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Accepted Time</th>
+                <th>Complete Task</th>
+            </thead>
+            <tbody>
+                {% for i in prog %}
+                <tr>
+                    <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                    <td style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                    <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                    <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                    <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                    <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                    <td style="padding-top: 18px;" name="accepted">{{i["accepted"]}}</td>
+                    <td><button id="{{i['id']}} btn" class="i btn btn-primary" type="submit">Complete</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 style="color: red;">Great Job! You do not have any requests in progress.</h3>
+        <p style="color: royalblue;">Schedule more tasks</p>
+    {% endif %}
+    <hr>
+    <h2>Your Completed Tasks</h2>
+    <hr>
+    {% if comp %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Requesting Resident</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Completed Time</th>
+                <th>View</th>
+            </thead>
+            <tbody>
+                {% for i in comp %}
+                <tr>
+                    <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                    <td width="15" style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                    <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                    <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                    <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                    <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                    <td style="padding-top: 18px;" name="accepted">{{i["completed"]}}</td>
+                    <td><button id="vbtn" class="{{i['id']}} c btn btn-primary" type="submit">Details</button></td>
+                </tr>
+                <div id="popup" class="popup {{i['id']}}">
+                    <div id="content">
+                        <h4>Your description of the case:</h4>
+                        <p>{{i["s_desc"]}}</p>
+                    </div>
+                    <a id="close" class="close {{'id'}}" onclick="togglePopup();"><img src="/static/images/cancel.png" width="20" alt="error"></a>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4 style="color: red;">It seems like you have not completed any requests yet</h4>
+    {% endif %}
+    <hr>
+    <h2>Your Closed Requests</h2>
+    <hr>
+    {% if clos %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Accepting Staff</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Completed Time</th>
+                <th>View</th>
+            </thead>
+            <tbody>
+                {% for i in clos %}
+                <tr>
+                    <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                    <td width="15" style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                    <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                    <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                    <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                    <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                    <td style="padding-top: 18px;" name="accepted">{{i["completed"]}}</td>
+                    <td><button id="vbtn" class="{{i['id']}} c btn btn-primary" type="submit">Summary</button></td>
+                </tr>
+                <div id="popup" class="popup {{i['id']}}">
+                    <div id="content">
+                        <h4><u>Summary</u></h4>
+                        <p><em><b>Staff's description:</b></em> {{i["s_desc"]}}</p>
+                        <p><em><b>Your rating:</b></em> {{i["rating"]}}/5</p>
+                        <p><em><b>Complaints:</b></em> {{i["r_desc"]}}</p>
+                    </div>
+                    <a id="close" class="close {{'id'}}" onclick="togglePopup();"><img src="/static/images/cancel.png" width="20" alt=""></a>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4 style="color: red;">It seems like none of your tasks have closed yet</h4>
+    {% endif %}
+    <script>
+        let status = document.getElementsByName('status')
+
+        color = () => {
+            for (let i = 0; i < status.length; i++)
+            {
+                if (status[i].innerText === "pending") {
+                    status[i].bgColor = "#FFBF00"
+                } else if (status[i].innerText === "completed") {
+                    status[i].bgColor = "#99ff99"
+                } else if (status[i].innerText === "closed") {
+                    status[i].bgColor = "#D2D2CF"
+                } else {
+                    status[i].bgColor = "#89CFF0"
+                }
+            }
+        }
+
+        color();
+
+        let buttons = document.getElementsByClassName('i');
+        let confirms = document.getElementsByClassName('c');
+        let close_btn = document.getElementById('close');
+
+        let rows = document.querySelectorAll('tr');
+
+        var pressed_button_id;
+        var childr;
+        var description;
+
+        for (let i = 0; i < buttons.length; i++)
+        {
+            buttons[i].addEventListener('click', () => {
+                while(!description) {
+                    description = prompt('Describe your actions and steps to solve this resident\'s concerns')
+                }
+
+                let prev_id = buttons[i].id + ' ' + i
+                buttons[i].setAttribute('id',prev_id)
+                arr_of_ids_btn = buttons[i].id.split(" ")
+                childr = rows[i]
+                pressed_button_id = arr_of_ids_btn[0]
+                change();
+                window.location.reload(true);
+            })
+        }
+
+        for (let i = 0; i < confirms.length; i++) {
+            confirms[i].addEventListener('click', () => {
+                togglePopup(confirms[i]);
+            })
+        }
+
+        // credit to stackoverflow for this function
+        getTime = () => {
+            let current = new Date(Math.round(new Date()/1000)*1000);
+            let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            let year = current.getFullYear();
+            let month = current.getMonth() + 1;
+            let date = current.getDate();
+            let hour = current.getHours();
+            let min = current.getMinutes();
+            let sec = current.getSeconds();
+            let time = year + '-' + month + '-' + date + 'T' + hour + ':' + min + ':' + sec ;
+            return time
+        }
+
+        togglePopup = (element) => {
+            let popup = document.getElementsByClassName('popup')
+            for (let i = 0; i < popup.length; i++)
+            {
+                if (!element) {
+                    popup[i].classList.remove('active')
+                }
+                else {
+                    if (element.classList[0] == popup[i].classList[1]) {
+                        popup[i].classList.add('active')
+                    } else {
+                        continue
+                    }
+                }
+            }
+
+
+
+        }
+
+        change = () => {
+            console.log('hi')
+            childr.children[2].innerText = 'completed'
+            color();
+            completed = getTime();
+
+            $.ajax({
+                url: '/tasks',
+                type:'get',
+                data: {
+                    rid: pressed_button_id,
+                    comp: completed,
+                    desc: description
+                },
+                success: (response) => {
+                    let new_html = response.html
+                }
+            })
+        }
+    </script>
+{% endblock %}

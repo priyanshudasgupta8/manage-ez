@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Schedule
+{% endblock %}
+
+{% block main %}
+    {% if row %}
+        <h2>Your Uniform Work Hours for Every Week</h2>
+        <table class="table table-striped">
+            <thead>
+                <th>Time Slot</th>
+                <th>Days of Work</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{row["start_time"]}}-{{row["end_time"]}}</td>
+                    <td>{{row["start_day"]}}-{{row["end_day"]}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <footer class="small text-center">
+            Please note that this schedule is subject to change from week to week and therefore, this isn't a permanent schedule.
+        </footer>
+    {% else %}
+        <h2>You currently do not have a schedule please wait for a maximum of 3 days to be assigned with one</h2>
+    {% endif %}
+{% endblock %}

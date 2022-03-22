@@ -1,0 +1,138 @@
+.c {
+    transition: 0.5s;
+}
+
+.c:hover {
+    letter-spacing: 2px !important;
+}
+
+#popup {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #ddd;
+    width: 450px;
+    padding: 80px 50px 50px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+    border-radius: 15px;
+    visibility: hidden;
+}
+
+#popup.active {
+    visibility: visible;
+    top: 50%;
+}
+
+#popup #content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+}
+
+.close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+}
+
+#s_popup {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #ddd;
+    width: 450px;
+    padding: 80px 50px 50px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+    border-radius: 15px;
+    visibility: hidden;
+}
+
+#s_popup.active {
+    visibility: visible;
+    top: 50%;
+}
+
+#s_popup #content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+}
+
+#popup_f {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #ddd;
+    width: 450px;
+    padding: 80px 50px 50px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+    border-radius: 15px;
+    visibility: hidden;
+}
+
+#popup_f.active {
+    visibility: visible;
+    top: 50%;
+}
+
+#popup_f #content {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    flex-direction: column;
+}
+
+.rating {
+    float:left;
+    width:300px;
+    margin-right:140px;
+}
+.rating span {
+    float:right;
+    position:relative;
+}
+
+.rating span input {
+    position:absolute;
+    top:0px;
+    left:0px;
+    opacity:0;
+}
+.rating span label {
+    display:inline-block;
+    width:30px;
+    height:30px;
+    text-align:center;
+    color:#FFF;
+    background:#ccc;
+    font-size:30px;
+    margin-right:2px;
+    line-height:30px;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+}
+.rating span:hover ~ span label,
+.rating span:hover label,
+.rating span.checked label,
+.rating span.checked ~ span label {
+    background:#F90;
+    color:#FFF;
+}

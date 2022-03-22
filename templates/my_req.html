@@ -1,0 +1,267 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Requests
+{% endblock %}
+
+{% block main %}
+    <link rel="stylesheet" href="/static/style.css">
+    <h2>Your Incomplete Requests</h2>
+    <br>
+    {% if prog %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Accepting Staff</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Accepted Time</th>
+            </thead>
+            <tbody>
+                {% for i in prog %}
+                    <tr>
+                        <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                        <td style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                        <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                        <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                        <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                        <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                        <td style="padding-top: 18px;" name="accepted">{{i["accepted"]}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 style="color: red;">None of your requests are currently incomplete</h3>
+    {% endif %}
+    <hr>
+    <h2>Your Completed Requests</h2>
+    <hr>
+    {% if comp %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Accepting Staff</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Completed Time</th>
+                <th>View</th>
+                <th>Feedback</th>
+            </thead>
+            <tbody>
+                {% for i in comp %}
+                <tr>
+                    <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                    <td style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                    <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                    <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                    <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                    <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                    <td style="padding-top: 18px;" name="accepted">{{i["completed"]}}</td>
+                    <td><button id="vbtn" class="{{i['id']}} i c btn btn-primary" type="submit">Details</button></td>
+                    <td><button id="vbtn" class="{{i['id']}} i f btn btn-primary" type="submit">Feedback</button></td>
+                </tr>
+                <div id="popup" class="popup {{i['id']}}">
+                    <div id="content">
+                        <h4>{{i["name"]}}'s description of the case:</h4>
+                        <p>{{i["s_desc"]}}</p>
+                    </div>
+                    <a id="close" class="close {{'id'}}" onclick="togglePopup();"><img src="/static/images/cancel.png" width="20" alt=""></a>
+                </div>
+                <div id="popup_f" class="popup_f {{i['id']}}">
+                    <div id="content">
+                        <h4>Are you satisfied with your service?</h4>
+                        <div class="rating">
+                            <span><input type="radio" name="rating" id="str5" value="5"><label for="str5"></label></span>
+                            <span><input type="radio" name="rating" id="str4" value="4"><label for="str4"></label></span>
+                            <span><input type="radio" name="rating" id="str3" value="3"><label for="str3"></label></span>
+                            <span><input type="radio" name="rating" id="str2" value="2"><label for="str2"></label></span>
+                            <span><input type="radio" name="rating" id="str1" value="1"><label for="str1"></label></span>
+                        </div>
+                    </div>
+                    <a id="close" class="close {{'id'}}" onclick="togglePopupF();"><img src="/static/images/cancel.png" width="20" alt=""></a>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4 style="color: red;">It seems like none of your requests have been completed</h4>
+    {% endif %}
+    <hr>
+    <h2>Your Closed Requests</h2>
+    <hr>
+    {% if clos %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Accepting Staff</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Requested Time</th>
+                <th>Completed Time</th>
+                <th>View</th>
+            </thead>
+            <tbody>
+                {% for i in clos %}
+                <tr>
+                    <td id="{{i['id']}}" style="padding-top: 18px;" name="req_id">{{i["id"]}}</td>
+                    <td style="padding-top: 18px;" name="name">{{i["name"]}}</td>
+                    <td style="padding-top: 18px;" name="status">{{i["status"]}}</td>
+                    <td style="padding-top: 18px;" name="description">{{i["description"]}}</td>
+                    <td style="padding-top: 18px;" name="requirement">{{i["requirement"]}}</td>
+                    <td style="padding-top: 18px;" name="time">{{i["time"]}}</td>
+                    <td style="padding-top: 18px;" name="accepted">{{i["completed"]}}</td>
+                    <td><button id="vbtn" class="{{i['id']}} i c btn btn-primary" type="submit">Summary</button></td>
+                </tr>
+                <div id="popup" class="popup {{i['id']}}">
+                    <div id="content">
+                        <h4><u>Summary</u></h4>
+                        <p><em><b>Staff's description:</b></em> {{i["s_desc"]}}</p>
+                        <p><em><b>Your rating:</b></em> {{i["rating"]}}/5</p>
+                        <p><em><b>Complaints:</b></em> {{i["r_desc"]}}</p>
+                    </div>
+                    <a id="close" class="close {{'id'}}" onclick="togglePopup();"><img src="/static/images/cancel.png" width="20" alt=""></a>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h4 style="color: red;">It seems like none of your requests have been closed</h4>
+    {% endif %}
+    <script>
+        let status = document.getElementsByName('status')
+
+        color = () => {
+            for (let i = 0; i < status.length; i++)
+            {
+                if (status[i].innerText === "pending") {
+                    status[i].bgColor = "#FFBF00"
+                } else if (status[i].innerText === "completed") {
+                    status[i].bgColor = "#99ff99"
+                } else if (status[i].innerText === "closed") {
+                    status[i].bgColor = "#D2D2CF"
+                } else {
+                    status[i].bgColor = "#89CFF0"
+                }
+            }
+        }
+
+        color();
+
+        let buttons = document.getElementsByClassName('i');
+        let confirms = document.getElementsByClassName('c');
+        let feedbacks = document.getElementsByClassName('f');
+        let close_btn = document.getElementById('close');
+
+        let rows = document.querySelectorAll('tr');
+
+        var pressed_button_id;
+        var childr;
+
+        for (let i = 0; i < buttons.length; i++)
+        {
+            buttons[i].addEventListener('click', () => {
+                childr = rows[i]
+                pressed_button_id = buttons[i].classList[0]
+            })
+        }
+
+        for (let i = 0; i < confirms.length; i++) {
+            confirms[i].addEventListener('click', () => {
+                togglePopup(confirms[i]);
+            })
+        }
+
+        for (let i = 0; i < feedbacks.length; i++) {
+            feedbacks[i].addEventListener('click', () => {
+                togglePopupF(feedbacks[i]);
+            })
+        }
+
+        togglePopup = (element) => {
+            let popup = document.getElementsByClassName('popup')
+            for (let i = 0; i < popup.length; i++)
+            {
+                if (!element) {
+                    popup[i].classList.remove('active')
+                }
+                else {
+                    if (element.classList[0] == popup[i].classList[1]) {
+                        popup[i].classList.add('active')
+                    } else {
+                        continue
+                    }
+                }
+            }
+        }
+
+        var rating, r_description;
+
+        togglePopupF = (element) => {
+            let popup = document.getElementsByClassName('popup_f')
+            for (let i = 0; i < popup.length; i++)
+            {
+                if (!element) {
+                    popup[i].classList.remove('active')
+                }
+                else {
+                    if (element.classList[0] == popup[i].classList[1]) {
+                        popup[i].classList.add('active')
+                        $(".rating input:radio").attr("checked", false);
+
+                        $('.rating input').click(function () {
+                            $(".rating span").removeClass('checked');
+                            $(this).parent().addClass('checked');
+                        });
+
+                        $('input:radio').change(
+                          function(){
+                            rating = this.value;
+                            if (rating <= 3) {
+                                while (!r_description) {
+                                    r_description = prompt('Describe what did you not like about our service?')
+                                }
+                            }
+
+                            popup[i].classList.remove('active')
+                            change();
+                            // window.location.reload(true);
+                        });
+                    } else {
+                        continue
+                    }
+                }
+            }
+        }
+
+        change = () => {
+            console.log('hi')
+            if (rating <= 3) {
+                childr.children[2].innerText = 'in progress'
+            } else {
+                childr.children[2].innerText = 'closed'
+            }
+            color();
+
+            console.log(pressed_button_id)
+
+            $.ajax({
+                url: '/my_req',
+                type:'get',
+                data: {
+                    rid: pressed_button_id,
+                    rate: rating,
+                    r_desc: r_description
+                },
+                success: (response) => {
+                    let new_html = response.html
+                }
+            })
+        }
+    </script>
+{% endblock %}

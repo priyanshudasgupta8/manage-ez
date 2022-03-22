@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    List of Orders
+{% endblock %}
+
+{% block main %}
+    <h2>{{comm}} Incomplete Request List</h2>
+    <br>
+    {% if requirements %}
+        <table class="table table-striped">
+            <thead>
+                <th>Request ID</th>
+                <th>Requesting Resident</th>
+                <th>Status</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Time</th>
+                <th>Accept Request</th>
+            </thead>
+            <tbody>
+                {% for request in requirements %}
+                    <tr>
+                        <td id="{{request['id']}}" style="padding-top: 18px;" name="req_id">{{request["id"]}}</td>
+                        <td style="padding-top: 18px;" name="name">{{request["name"]}}</td>
+                        <td style="padding-top: 18px;" name="status">{{request["status"]}}</td>
+                        <td style="padding-top: 18px;" name="description">{{request["description"]}}</td>
+                        <td style="padding-top: 18px;" name="requirement">{{request["requirement"]}}</td>
+                        <td style="padding-top: 18px;" name="time">{{request["time"]}}</td>
+                        {% if request["status"] == "in progress" or request["status"] == "completed" %}
+                            <td><button disabled id="{{request['id']}} btn" class="btn btn-primary" type="submit">Accept</button></td>
+                        {% else %}
+                            <td><button id="{{request['id']}} btn" class="btn btn-primary" type="submit">Accept</button></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <hr>
+        <h3 style="color: red;">No currently pending requests from any resident of this community</h2>
+    {% endif %}
+    <script>
+        let status = document.getElementsByName('status')
+
+        color = () => {
+            for (let i = 0; i < status.length; i++)
+            {
+                if (status[i].innerText === "pending") {
+                    status[i].bgColor = "#FFBF00"
+                } else if (status[i].innerText === "completed") {
+                    status[i].bgColor = "#99ff99"
+                } else if (status[i].innerText === "closed") {
+                    status[i].bgColor = "#D2D2CF"
+                } else {
+                    status[i].bgColor = "#89CFF0"
+                }
+            }
+        }
+
+        color();
+
+        let buttons = document.querySelectorAll('button');
+        let rows = document.querySelectorAll('tr');
+
+        var pressed_button_id;
+        var childr;
+
+        for (let i = 0; i < buttons.length; i++)
+        {
+            buttons[i].addEventListener('click', () => {
+                let prev_id = buttons[i].id + ' ' + i
+                buttons[i].setAttribute('id',prev_id)
+                arr_of_ids_btn = buttons[i].id.split(" ")
+                childr = rows[i]
+                pressed_button_id = arr_of_ids_btn[0]
+                change();
+                window.location.reload(true);
+            })
+        }
+
+
+        getTime = () => {
+            let current = new Date(Math.round(new Date()/1000)*1000);
+            let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            let year = current.getFullYear();
+            let month = current.getMonth() + 1;
+            let date = current.getDate();
+            let hour = current.getHours();
+            let min = current.getMinutes();
+            let sec = current.getSeconds();
+            let time = year + '-' + month + '-' + date + 'T' + hour + ':' + min + ':' + sec ;
+            return time
+        }
+
+        change = () => {
+            childr.children[2].innerText = 'in progress'
+            color();
+            accept = getTime();
+
+            $.ajax({
+                url: '/listr',
+                type:'get',
+                data: {
+                    rid: pressed_button_id,
+                    acct: accept
+                },
+                success: (response) => {
+                    let new_html = response.html
+                }
+            })
+        }
+    </script>
+{% endblock %}

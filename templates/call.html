@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Request
+{% endblock %}
+
+{% block main %}
+    <h2>On which day would you want our staff to attend to your needs?</h2>
+    <form action="/call" method="post">
+        <div class="form-group">
+            <input placeholder="Week" class="form-control" autocomplete="off" autofocus name="week" type="datetime-local">
+        </div>
+        <div class="form-group">
+            <select name="req" class="form-control">
+                <option disabled selected value="">Requirement</option>
+                <option value="receptionist">Receptionist</option>
+                <option value="plumber">Plumber</option>
+                <option value="electrician">Electrician</option>
+                <option value="carpenter">Carpenter</option>
+                <option value="general">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <textarea maxlength="100" placeholder="Description (Max 100)" class="form-control" autocomplete="off" cols="25" rows="5" autofocus name="description" type="text"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Request for Maintenance</button>
+    </form>
+{% endblock %}

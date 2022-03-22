@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Staff
+{% endblock %}
+
+{% block main %}
+    <h1>Welcome {{user}}!</h1>
+    {% if staff %}
+        <h2>{{staff[0]["comm"]}} Staff List</h2>
+        <br>
+        <table class="table table-striped">
+            <thead>
+                <th>Staff Member</th>
+                <th>Area of Expertise</th>
+                <th>Community</th>
+            </thead>
+            <tbody>
+                {% for member in staff %}
+                <tr>
+                    <td>{{member["name"]}}</td>
+                    <td>{{member["special"]}}</td>
+                    <td>{{member["comm"]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h2>This community does not have any staff members enrolled</h2>
+    {% endif %}
+{% endblock %}
